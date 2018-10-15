@@ -21,7 +21,7 @@ const App = () => (
           </li>
         </ul>
       </nav>
-      <div>
+      <div className="main-content">
         <Routes />
       </div>
     </div>
