@@ -7,13 +7,21 @@ import './app.css'
 
 const App = () => (
   <Router>
-    <div>
+    <div className="container">
       <nav>
-        <Link exact to="/">Menu1</Link>
-        <Link to="/about">Menu2</Link>
-        <Link to="/blog">Menu3</Link>
+        <ul className="nav justify-content-center">
+          <li className="nav-item">
+            <Link exact to="/" className="nav-link active">Home</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/about" className="nav-link">About</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/work" className="nav-link">Work</Link>
+          </li>
+        </ul>
       </nav>
-      <div className="content">
+      <div>
         <Routes />
       </div>
     </div>

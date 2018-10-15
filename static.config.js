@@ -16,14 +16,14 @@ export default {
         component: 'src/containers/About',
       },
       {
-        path: '/blog',
-        component: 'src/containers/Blog',
+        path: '/work',
+        component: 'src/containers/Work',
         getData: () => ({
           posts,
         }),
         children: posts.map(post => ({
-          path: `/post/${post.id}`,
-          component: 'src/containers/Post',
+          path: `/project/${post.id}`,
+          component: 'src/containers/Project',
           getData: () => ({
             post,
           }),

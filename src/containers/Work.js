@@ -5,13 +5,13 @@ import { withRouteData, Link } from 'react-static'
 
 export default withRouteData(({ posts }) => (
   <div>
-    <h1>It's blog time.</h1>
+    <h1>Work</h1>
     <br />
-    All Posts:
+    All Projects:
     <ul>
       {posts.map(post => (
         <li key={post.id}>
-          <Link to={`/blog/post/${post.id}/`}>{post.title}</Link>
+          <Link to={`/work/project/${post.id}/`}>{post.title}</Link>
         </li>
       ))}
     </ul>
