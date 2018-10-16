@@ -56,6 +56,10 @@ export default {
         })),
       },
       {
+        path: '/contact',
+        component: 'src/containers/Contact',
+      },
+      {
         is404: true,
         component: 'src/containers/404',
       },
