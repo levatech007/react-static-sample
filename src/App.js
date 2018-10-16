@@ -7,7 +7,7 @@ import './app.css'
 
 const App = () => (
   <Router>
-    <div className="container">
+    <div className="container-fluid">
       <nav>
         <ul className="nav justify-content-center">
           <li className="nav-item">
@@ -19,10 +19,20 @@ const App = () => (
           <li className="nav-item">
             <Link to="/work" className="nav-link">Work</Link>
           </li>
+          <li className="nav-item">
+            <Link to="/contact" className="nav-link">Contact</Link>
+          </li>
         </ul>
       </nav>
-      <div className="main-content">
-        <Routes />
+      <div className="row main-content">
+        <div className="container">
+          <Routes />
+        </div>
+      </div>
+      <div className="row footer">
+        <div className="container">
+          <p>Footer content here</p>
+        </div>
       </div>
     </div>
   </Router>

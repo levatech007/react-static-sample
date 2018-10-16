@@ -1,3 +1,14 @@
 .main-content {
-  background-color: #4590c9;
+  background-color: #8dc1e2;
+  min-height: 600px;
+  padding: 50px 50px;
+}
+
+.footer {
+  background-color: #999999;
+  min-height: 200px;
+}
+
+.red-text {
+  color: red;
 }
