@@ -31,7 +31,24 @@ const App = () => (
       </div>
       <div className="row footer">
         <div className="container">
-          <p>Footer content here</p>
+          <div className="row justify-content-center">
+            <div className="col-md-3 text-center">
+              <p>COLUMN</p>
+              <p>Content</p>
+            </div>
+            <div className="col-md-3 text-center">
+              <p>COLUMN</p>
+              <p>Content</p>
+            </div>
+            <div className="col-md-3 text-center">
+              <p>COLUMN</p>
+              <p>Content</p>
+            </div>
+          </div>
+          <hr></hr>
+          <div className="row justify-content-center">
+            <p className="small">&copy; 2018 Owner of page</p>
+          </div>
         </div>
       </div>
     </div>
