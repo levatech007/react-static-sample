@@ -1,4 +1,5 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
+import Alert from '../components/Alert'
 
 class ContactForm extends Component {
   constructor(){
@@ -9,7 +10,9 @@ class ContactForm extends Component {
         email: "",
         message: "",
         alert: false,
-        submitted: false
+        submitted: false,
+        alertStyle: "alert alert-danger",
+        alertMessage: "Alert!"
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.onFormSubmit = this.onFormSubmit.bind(this)
@@ -27,13 +30,9 @@ class ContactForm extends Component {
 
   onFormSubmit(e) {
     e.preventDefault();
-    console.log(this.state.name)
-    console.log(this.state.email)
-    console.log(this.state.phone)
-    console.log(this.state.message)
     this.setState({
         name: "",
-        phone: 0,
+        phone: "",
         email: "",
         message: "",
         alert: true,
@@ -47,6 +46,7 @@ class ContactForm extends Component {
         <div className="row justify-content-center">
           <h1>Contact</h1>
         </div>
+        <Alert alertStyle={ this.state.alertStyle } alertMessage= { this.state.alertMessage }/>
         <div className="row justify-content-center">
           <div className="col-md-6 contact-form">
             <form onSubmit={ this.onFormSubmit } className="forms">
@@ -72,6 +72,7 @@ class ContactForm extends Component {
                     name="email"
                     type="email"
                     className="form-control"
+                    required="required"
                     placeholder="Your email"
                     onChange={ this.handleInputChange }
                     value={ this.state.email }
@@ -86,6 +87,7 @@ class ContactForm extends Component {
                     name="phone"
                     type="number"
                     className="form-control"
+                    required="required"
                     placeholder="Your phone number"
                     onChange={ this.handleInputChange }
                     value={ this.state.phone }
@@ -94,13 +96,14 @@ class ContactForm extends Component {
               </div>
               <br></br>
               <div className="form-group row">
-                <label className="col-sm-4 col-form-label">Comment <span className="red-text">*</span></label>
+                <label className="col-sm-4 col-form-label">Message <span className="red-text">*</span></label>
                 <div className="col-sm-8">
                   <textarea
                     name="message"
                     className="form-control"
                     rows="4"
                     placeholder="Your text here"
+                    required="required"
                     onChange={this.handleInputChange}
                     value={ this.state.message }
                     >
@@ -112,7 +115,7 @@ class ContactForm extends Component {
                   <input
                     type="submit"
                     className="btn btn-primary"
-                    value="Submit your request"
+                    value="Send your message"
                   />
                 </div>
               </div>
