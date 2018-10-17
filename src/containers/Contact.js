@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Alert from '../components/Alert'
+import * as emailjs from 'emailjs-com'
 
 class ContactForm extends Component {
   constructor(){
@@ -59,27 +60,33 @@ class ContactForm extends Component {
   onFormSubmit(e) {
     e.preventDefault()
     if (this.validateFormFields()) {
-      console.log("Form is valid")
-      this.setState({
-        alert: true,
-        alertStyle: "alert alert-success",
-        alertMessages: ["Thank you! Your request has been submitted!"]
-      })
+      var template_params = {
+       "reply_to": this.state.email,
+       "from_name": this.state.name,
+       "to_name": "TBD",
+       "message_html": this.state.message,
+      }
+
+      var user_id = process.env.REACT_APP_EMAILJS_USERID
+      var service_id = process.env.REACT_APP_EMAILJS_SERVICEID
+      var template_id = process.env.REACT_APP_EMAILJS_TEMPLATEID
+      emailjs.send(service_id,template_id,template_params, user_id)
+        .then((resp) => {
+          console.log(resp)
+          this.setState({
+            alert: true,
+            alertStyle: "alert alert-success",
+            alertMessages: ["Thank you! Your request has been submitted!"]
+          })
+        }).fail((resp) => {
+          console.log(resp)
+        })
     } else {
-      console.log("Form is not valid")
       this.setState({
         alert: true,
-        alertStyle: "alert alert-danger",
+        alertStyle: "alert alert-danger"
       })
     }
-    // this.setState({
-    //     name: "",
-    //     phone: "",
-    //     email: "",
-    //     message: "",
-    //     alert: true,
-    //     submitted: true
-    // })
   }
 
   render() {
