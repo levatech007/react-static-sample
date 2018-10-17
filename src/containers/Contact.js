@@ -1,84 +1,92 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
+import Alert from '../components/Alert'
+import * as emailjs from 'emailjs-com'
 
 class ContactForm extends Component {
   constructor(){
     super();
     this.state = {
-      message: {
         name: "",
-        phone: 0,
+        phone: "",
         email: "",
-        comment: "",
+        message: "",
         alert: false,
-        submitted: false
-      }
+        submitted: false,
+        alertStyle: "",
+        alertMessages: []
+    }
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.validateFormFields = this.validateFormFields.bind(this)
+    this.onFormSubmit = this.onFormSubmit.bind(this)
+  }
+
+  handleInputChange(e) {
+    e.preventDefault()
+    const target = e.target
+    const name = target.name
+    const value = target.value
+    this.setState({
+      [name]: value
+    })
+  }
+
+  validateFormFields() {
+    let alertMessages = []
+    let formIsValid = true
+
+    if (this.state.name.length < 3) {
+      formIsValid = false
+      alertMessages.push("Name must exceed 2 symbols")
     }
 
-    this.onNameInputChange = this.onNameInputChange.bind(this);
-    this.onPhoneInputChange = this.onPhoneInputChange.bind(this);
-    this.onEmailInputChange = this.onEmailInputChange.bind(this);
-    this.onCommentInputChange = this.onCommentInputChange.bind(this);
-    this.onFormSubmit= this.onFormSubmit.bind(this);
-  }
+    const validEmailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    if (!validEmailPattern.test(this.state.email)) {
+      formIsValid = false
+      alertMessages.push("Email is not valid")
+    }
 
-  onNameInputChange(e) {
-    this.setState({
-      message: {
-        name: e.target.value,
-        phone: this.state.message.phone,
-        email: this.state.message.email,
-        comment: this.state.message.comment,
-      }
-    })
-  }
+    if (this.state.message.length < 10) {
+      formIsValid = false
+      alertMessages.push("Message must exceed 10 symbols")
+    }
 
-  onPhoneInputChange(e) {
     this.setState({
-      message: {
-        name: this.state.message.name,
-        phone: e.target.value,
-        email: this.state.message.email,
-        comment: this.state.message.comment,
-      }
+      alertMessages: alertMessages
     })
-  }
 
-  onEmailInputChange(e) {
-    this.setState({
-      message: {
-        name:this.state.message.name,
-        phone: this.state.message.phone,
-        email: e.target.value,
-        comment: this.state.message.comment,
-      }
-    })
-  }
-
-  onCommentInputChange(e) {
-    this.setState({
-      message: {
-        name:this.state.message.name,
-        phone: this.state.message.phone,
-        email: this.state.message.email,
-        comment: e.target.value
-      }
-    })
+    return formIsValid
   }
 
   onFormSubmit(e) {
-    e.preventDefault();
-    let message = this.state.message
-    console.log(message)
-    this.setState({
-      message: {
-        name: "",
-        phone: 0,
-        email: "",
-        comment: "",
-        alert: true,
-        submitted: true
+    e.preventDefault()
+    if (this.validateFormFields()) {
+      var template_params = {
+       "reply_to": this.state.email,
+       "from_name": this.state.name,
+       "to_name": "TBD",
+       "message_html": this.state.message,
       }
-    })
+
+      var user_id = process.env.REACT_APP_EMAILJS_USERID
+      var service_id = process.env.REACT_APP_EMAILJS_SERVICEID
+      var template_id = process.env.REACT_APP_EMAILJS_TEMPLATEID
+      emailjs.send(service_id,template_id,template_params, user_id)
+        .then((resp) => {
+          console.log(resp)
+          this.setState({
+            alert: true,
+            alertStyle: "alert alert-success",
+            alertMessages: ["Thank you! Your request has been submitted!"]
+          })
+        }).fail((resp) => {
+          console.log(resp)
+        })
+    } else {
+      this.setState({
+        alert: true,
+        alertStyle: "alert alert-danger"
+      })
+    }
   }
 
   render() {
@@ -87,6 +95,7 @@ class ContactForm extends Component {
         <div className="row justify-content-center">
           <h1>Contact</h1>
         </div>
+        { this.state.alert ? <Alert alertStyle={ this.state.alertStyle } alertMessages={ this.state.alertMessages }/> : null }
         <div className="row justify-content-center">
           <div className="col-md-6 contact-form">
             <form onSubmit={ this.onFormSubmit } className="forms">
@@ -94,10 +103,13 @@ class ContactForm extends Component {
                 <label className="col-sm-4 col-form-label">Name <span className="red-text">*</span></label>
                 <div className="col-sm-8">
                   <input
+                    name="name"
                     type="text"
                     className="form-control"
+                    required="required"
                     placeholder="Your name"
-                    onChange={this.onNameInputChange}
+                    onChange={ this.handleInputChange }
+                    value= { this.state.name }
                   />
                 </div>
               </div>
@@ -106,10 +118,13 @@ class ContactForm extends Component {
                 <label className="col-sm-4 col-form-label">Email <span className="red-text">*</span></label>
                 <div className="col-sm-8">
                   <input
+                    name="email"
                     type="email"
                     className="form-control"
+                    required="required"
                     placeholder="Your email"
-                    onChange={this.onEmailInputChange}
+                    onChange={ this.handleInputChange }
+                    value={ this.state.email }
                   />
                 </div>
               </div>
@@ -118,22 +133,28 @@ class ContactForm extends Component {
                 <label className="col-sm-4 col-form-label">Phone <span className="red-text">*</span></label>
                 <div className="col-sm-8">
                   <input
+                    name="phone"
                     type="number"
                     className="form-control"
+                    required="required"
                     placeholder="Your phone number"
-                    onChange={this.onPhoneInputChange}
+                    onChange={ this.handleInputChange }
+                    value={ this.state.phone }
                   />
                 </div>
               </div>
               <br></br>
               <div className="form-group row">
-                <label className="col-sm-4 col-form-label">Comment <span className="red-text">*</span></label>
+                <label className="col-sm-4 col-form-label">Message <span className="red-text">*</span></label>
                 <div className="col-sm-8">
                   <textarea
+                    name="message"
                     className="form-control"
                     rows="4"
                     placeholder="Your text here"
-                    onChange={this.onCommentInputChange}
+                    required="required"
+                    onChange={this.handleInputChange}
+                    value={ this.state.message }
                     >
                     </textarea>
                 </div>
@@ -143,7 +164,7 @@ class ContactForm extends Component {
                   <input
                     type="submit"
                     className="btn btn-primary"
-                    value="Submit your request"
+                    value="Send your message"
                   />
                 </div>
               </div>
