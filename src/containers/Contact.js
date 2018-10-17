@@ -4,80 +4,40 @@ class ContactForm extends Component {
   constructor(){
     super();
     this.state = {
-      message: {
         name: "",
-        phone: 0,
+        phone: "",
         email: "",
-        comment: "",
+        message: "",
         alert: false,
         submitted: false
-      }
     }
-
-    this.onNameInputChange = this.onNameInputChange.bind(this);
-    this.onPhoneInputChange = this.onPhoneInputChange.bind(this);
-    this.onEmailInputChange = this.onEmailInputChange.bind(this);
-    this.onCommentInputChange = this.onCommentInputChange.bind(this);
-    this.onFormSubmit= this.onFormSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.onFormSubmit = this.onFormSubmit.bind(this)
   }
 
-  onNameInputChange(e) {
+  handleInputChange(e) {
+    e.preventDefault()
+    const target = e.target
+    const name = target.name
+    const value = target.value
     this.setState({
-      message: {
-        name: e.target.value,
-        phone: this.state.message.phone,
-        email: this.state.message.email,
-        comment: this.state.message.comment,
-      }
-    })
-  }
-
-  onPhoneInputChange(e) {
-    this.setState({
-      message: {
-        name: this.state.message.name,
-        phone: e.target.value,
-        email: this.state.message.email,
-        comment: this.state.message.comment,
-      }
-    })
-  }
-
-  onEmailInputChange(e) {
-    this.setState({
-      message: {
-        name:this.state.message.name,
-        phone: this.state.message.phone,
-        email: e.target.value,
-        comment: this.state.message.comment,
-      }
-    })
-  }
-
-  onCommentInputChange(e) {
-    this.setState({
-      message: {
-        name:this.state.message.name,
-        phone: this.state.message.phone,
-        email: this.state.message.email,
-        comment: e.target.value
-      }
+      [name]: value
     })
   }
 
   onFormSubmit(e) {
     e.preventDefault();
-    let message = this.state.message
-    console.log(message)
+    console.log(this.state.name)
+    console.log(this.state.email)
+    console.log(this.state.phone)
+    console.log(this.state.message)
     this.setState({
-      message: {
         name: "",
         phone: 0,
         email: "",
-        comment: "",
+        message: "",
         alert: true,
         submitted: true
-      }
     })
   }
 
@@ -94,10 +54,13 @@ class ContactForm extends Component {
                 <label className="col-sm-4 col-form-label">Name <span className="red-text">*</span></label>
                 <div className="col-sm-8">
                   <input
+                    name="name"
                     type="text"
                     className="form-control"
+                    required="required"
                     placeholder="Your name"
-                    onChange={this.onNameInputChange}
+                    onChange={ this.handleInputChange }
+                    value= { this.state.name }
                   />
                 </div>
               </div>
@@ -106,10 +69,12 @@ class ContactForm extends Component {
                 <label className="col-sm-4 col-form-label">Email <span className="red-text">*</span></label>
                 <div className="col-sm-8">
                   <input
+                    name="email"
                     type="email"
                     className="form-control"
                     placeholder="Your email"
-                    onChange={this.onEmailInputChange}
+                    onChange={ this.handleInputChange }
+                    value={ this.state.email }
                   />
                 </div>
               </div>
@@ -118,10 +83,12 @@ class ContactForm extends Component {
                 <label className="col-sm-4 col-form-label">Phone <span className="red-text">*</span></label>
                 <div className="col-sm-8">
                   <input
+                    name="phone"
                     type="number"
                     className="form-control"
                     placeholder="Your phone number"
-                    onChange={this.onPhoneInputChange}
+                    onChange={ this.handleInputChange }
+                    value={ this.state.phone }
                   />
                 </div>
               </div>
@@ -130,10 +97,12 @@ class ContactForm extends Component {
                 <label className="col-sm-4 col-form-label">Comment <span className="red-text">*</span></label>
                 <div className="col-sm-8">
                   <textarea
+                    name="message"
                     className="form-control"
                     rows="4"
                     placeholder="Your text here"
-                    onChange={this.onCommentInputChange}
+                    onChange={this.handleInputChange}
+                    value={ this.state.message }
                     >
                     </textarea>
                 </div>
