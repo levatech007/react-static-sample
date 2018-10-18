@@ -13,7 +13,7 @@ class ContactForm extends Component {
         alert: false,
         submitted: false,
         alertStyle: "",
-        alertMessages: []
+        alertMessages: [],
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.validateFormFields = this.validateFormFields.bind(this)
@@ -33,58 +33,56 @@ class ContactForm extends Component {
   validateFormFields() {
     let alertMessages = []
     let formIsValid = true
-
     if (this.state.name.length < 3) {
       formIsValid = false
       alertMessages.push("Name must exceed 2 symbols")
     }
-
     const validEmailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     if (!validEmailPattern.test(this.state.email)) {
       formIsValid = false
       alertMessages.push("Email is not valid")
     }
-
     if (this.state.message.length < 10) {
       formIsValid = false
       alertMessages.push("Message must exceed 10 symbols")
     }
-
     this.setState({
       alertMessages: alertMessages
     })
-
     return formIsValid
   }
 
   onFormSubmit(e) {
     e.preventDefault()
     if (this.validateFormFields()) {
-      var template_params = {
+      var templateParams = {
        "reply_to": this.state.email,
        "from_name": this.state.name,
        "to_name": "TBD",
        "message_html": this.state.message,
       }
 
-      var user_id = process.env.REACT_APP_EMAILJS_USERID
-      var service_id = process.env.REACT_APP_EMAILJS_SERVICEID
-      var template_id = process.env.REACT_APP_EMAILJS_TEMPLATEID
-      emailjs.send(service_id,template_id,template_params, user_id)
+      var userId = process.env.REACT_APP_EMAILJS_USERID
+      var serviceId = process.env.REACT_APP_EMAILJS_SERVICEID
+      var templateId = process.env.REACT_APP_EMAILJS_TEMPLATEID
+      emailjs.send(serviceId,templateId,templateParams, userId)
         .then((resp) => {
-          console.log(resp)
           this.setState({
             alert: true,
             alertStyle: "alert alert-success",
             alertMessages: ["Thank you! Your request has been submitted!"]
           })
         }).fail((resp) => {
-          console.log(resp)
+          this.setState({
+            alert: true,
+            alertStyle: "alert alert-danger",
+            alertMessages: ["Oops...something went wrong! Please try again."]
+          })
         })
     } else {
       this.setState({
         alert: true,
-        alertStyle: "alert alert-danger"
+        alertStyle: "alert alert-danger",
       })
     }
   }
