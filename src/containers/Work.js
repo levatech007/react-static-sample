@@ -1,7 +1,6 @@
 
 import React from 'react'
 import { withRouteData, Link } from 'react-static'
-//
 
 export default withRouteData(({ projects }) => (
   <div className="row justify-content-center">
